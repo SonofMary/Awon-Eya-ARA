@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>African Languages Body Parts Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>African Languages Body Parts Game</h1>
+    <p>Select Yoruba, Igbo, Hausa, Swahili, or Zulu. Drag the African language body-part word from the right and drop it into the empty box beside the matching English word on the left. Press the sound button to hear the pronunciation.</p>
+  </header>
+
+  <main>
+    <section class="control-panel">
+      <div>
+        <label for="languageSelect">Choose African Language</label>
+        <select id="languageSelect"></select>
+      </div>
+      <div>
+        <label for="figureSelect">Choose Figure</label>
+        <select id="figureSelect">
+          <option value="female">Real human female diagram</option>
+          <option value="male">Real human male diagram</option>
+        </select>
+      </div>
+      <button id="resetBtn">Reset Game</button>
+      <button id="checkBtn">Check Answers</button>
+      <div class="score-card" id="scoreCard">Score: 0 / 12</div>
+    </section>
+
+    <section class="game-layout">
+      <aside class="panel">
+        <h2>Left Side: Empty Boxes</h2>
+        <p class="instruction">Drop the correct word into each empty box. The English body-part names stay on this side as your guide.</p>
+        <div class="drop-list" id="dropList"></div>
+        <div class="feedback" id="feedback">Start dragging the words from the right.</div>
+      </aside>
+
+      <section class="figure-panel">
+        <h2>Human Body Diagram</h2>
+        <div class="figure-wrap">
+          <svg id="humanSvg" viewBox="0 0 420 650" role="img" aria-label="Realistic human body diagram">
+            <defs>
+              <linearGradient id="skin" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#9f643f" />
+                <stop offset="100%" stop-color="#6c3e27" />
+              </linearGradient>
+              <linearGradient id="cloth" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0%" stop-color="#276449" />
+                <stop offset="100%" stop-color="#a85f30" />
+              </linearGradient>
+              <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#000" flood-opacity="0.25" />
+              </filter>
+            </defs>
+            <g id="femaleFigure" filter="url(#softShadow)">
+              <ellipse cx="210" cy="615" rx="115" ry="18" fill="#000" opacity="0.13"/>
+              <path d="M166 150 C155 185 150 230 154 270 C159 325 169 382 181 440 L239 440 C251 382 261 325 266 270 C270 230 265 185 254 150 C239 137 181 137 166 150 Z" fill="url(#cloth)"/>
+              <path d="M170 160 C145 205 125 270 111 345" fill="none" stroke="url(#skin)" stroke-width="24" stroke-linecap="round"/>
+              <path d="M250 160 C275 205 295 270 309 345" fill="none" stroke="url(#skin)" stroke-width="24" stroke-linecap="round"/>
+              <circle cx="105" cy="357" r="17" fill="url(#skin)"/>
+              <circle cx="315" cy="357" r="17" fill="url(#skin)"/>
+              <path d="M188 432 C181 487 172 545 162 600" fill="none" stroke="url(#skin)" stroke-width="28" stroke-linecap="round"/>
+              <path d="M232 432 C239 487 248 545 258 600" fill="none" stroke="url(#skin)" stroke-width="28" stroke-linecap="round"/>
+              <ellipse cx="154" cy="608" rx="27" ry="12" fill="#5d321f"/>
+              <ellipse cx="266" cy="608" rx="27" ry="12" fill="#5d321f"/>
+              <rect x="193" y="118" width="34" height="38" rx="14" fill="url(#skin)"/>
+              <circle cx="210" cy="83" r="47" fill="url(#skin)"/>
+              <path d="M169 85 C162 38 191 18 225 25 C254 31 270 59 258 111 C246 90 231 70 210 70 C190 70 177 88 169 85 Z" fill="#2f1e18"/>
+              <ellipse cx="194" cy="82" rx="5" ry="4" fill="#1a120e"/>
+              <ellipse cx="226" cy="82" rx="5" ry="4" fill="#1a120e"/>
+              <path d="M209 87 C204 98 204 104 213 105" fill="none" stroke="#4a2518" stroke-width="3" stroke-linecap="round"/>
+              <path d="M194 115 C204 124 220 124 229 114" fill="none" stroke="#4a2518" stroke-width="4" stroke-linecap="round"/>
+            </g>
+            <g id="maleFigure" filter="url(#softShadow)" style="display:none">
+              <ellipse cx="210" cy="615" rx="115" ry="18" fill="#000" opacity="0.13"/>
+              <path d="M155 150 C145 210 150 305 169 438 L251 438 C270 305 275 210 265 150 C240 135 180 135 155 150 Z" fill="url(#cloth)"/>
+              <path d="M162 165 C135 220 115 280 103 348" fill="none" stroke="url(#skin)" stroke-width="28" stroke-linecap="round"/>
+              <path d="M258 165 C285 220 305 280 317 348" fill="none" stroke="url(#skin)" stroke-width="28" stroke-linecap="round"/>
+              <circle cx="98" cy="360" r="18" fill="url(#skin)"/>
+              <circle cx="322" cy="360" r="18" fill="url(#skin)"/>
+              <path d="M186 435 C181 490 174 545 166 600" fill="none" stroke="url(#skin)" stroke-width="31" stroke-linecap="round"/>
+              <path d="M234 435 C239 490 246 545 254 600" fill="none" stroke="url(#skin)" stroke-width="31" stroke-linecap="round"/>
+              <ellipse cx="158" cy="608" rx="30" ry="12" fill="#5d321f"/>
+              <ellipse cx="262" cy="608" rx="30" ry="12" fill="#5d321f"/>
+              <rect x="191" y="118" width="38" height="38" rx="14" fill="url(#skin)"/>
+              <circle cx="210" cy="82" r="48" fill="url(#skin)"/>
+              <path d="M165 72 C174 31 198 18 230 26 C256 33 269 55 260 81 C238 65 190 63 165 72 Z" fill="#20140f"/>
+              <ellipse cx="194" cy="82" rx="5" ry="4" fill="#1a120e"/>
+              <ellipse cx="226" cy="82" rx="5" ry="4" fill="#1a120e"/>
+              <path d="M209 88 C204 100 205 106 214 106" fill="none" stroke="#4a2518" stroke-width="3" stroke-linecap="round"/>
+              <path d="M194 114 C204 122 220 122 229 113" fill="none" stroke="#4a2518" stroke-width="4" stroke-linecap="round"/>
+            </g>
+          </svg>
+          <span class="callout" style="left:48%; top:9%;">Head</span>
+          <span class="callout" style="left:33%; top:12%;">Eye</span>
+          <span class="callout" style="left:58%; top:16%;">Mouth</span>
+          <span class="callout" style="left:57%; top:22%;">Neck</span>
+          <span class="callout" style="left:21%; top:25%;">Shoulder</span>
+          <span class="callout" style="left:49%; top:32%;">Chest</span>
+          <span class="callout" style="left:50%; top:43%;">Stomach</span>
+          <span class="callout" style="left:17%; top:55%;">Hand</span>
+          <span class="callout" style="left:62%; top:55%;">Finger</span>
+          <span class="callout" style="left:36%; top:70%;">Thigh</span>
+          <span class="callout" style="left:55%; top:82%;">Knee</span>
+          <span class="callout" style="left:38%; top:94%;">Foot</span>
+        </div>
+        <div class="api-note">
+          <strong>API note:</strong> This demo is ready for African language API connection. For now, it uses a built-in classroom dictionary and the browser speech engine. You can later connect Igbo API, Khaya AI, Google Cloud, ElevenLabs, or a custom African language TTS endpoint where API keys are available.
+        </div>
+      </section>
+
+      <aside class="panel">
+        <h2>Right Side: African Language Words</h2>
+        <p class="instruction">Drag these words to the empty boxes. Use the speaker button to hear each word.</p>
+        <div class="word-bank" id="wordBank"></div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const bodyParts = [
+      { key: "head", english: "Head" },
+      { key: "eye", english: "Eye" },
+      { key: "mouth", english: "Mouth" },
+      { key: "neck", english: "Neck" },
+      { key: "shoulder", english: "Shoulder" },
+      { key: "chest", english: "Chest" },
+      { key: "stomach", english: "Stomach" },
+      { key: "hand", english: "Hand" },
+      { key: "finger", english: "Finger" },
+      { key: "thigh", english: "Thigh" },
+      { key: "knee", english: "Knee" },
+      { key: "foot", english: "Foot" }
+    ];
+
+    const languages = {
+      yoruba: {
+        name: "Yoruba",
+        speechLang: "yo-NG",
+        parts: {
+          head: "Orí", eye: "Ojú", mouth: "Ẹnu", neck: "Ọrùn", shoulder: "Èjìká", chest: "Àyà", stomach: "Ikùn", hand: "Ọwọ́", finger: "Ìka ọwọ́", thigh: "Itan", knee: "Orókún", foot: "Ẹsẹ̀"
+        }
+      },
+      igbo: {
+        name: "Igbo",
+        speechLang: "ig-NG",
+        parts: {
+          head: "Isi", eye: "Anya", mouth: "Ọnụ", neck: "Olu", shoulder: "Ubu", chest: "Obi", stomach: "Afọ", hand: "Aka", finger: "Mkpịsị aka", thigh: "Apata ụkwụ", knee: "Ikpere", foot: "Ụkwụ"
+        }
+      },
+      hausa: {
+        name: "Hausa",
+        speechLang: "ha-NG",
+        parts: {
+          head: "Kai", eye: "Ido", mouth: "Baki", neck: "Wuya", shoulder: "Kafaɗa", chest: "Kirji", stomach: "Ciki", hand: "Hannu", finger: "Yatsa", thigh: "Cinya", knee: "Gwiwa", foot: "Ƙafa"
+        }
+      },
+      swahili: {
+        name: "Swahili",
+        speechLang: "sw-KE",
+        parts: {
+          head: "Kichwa", eye: "Jicho", mouth: "Mdomo", neck: "Shingo", shoulder: "Bega", chest: "Kifua", stomach: "Tumbo", hand: "Mkono", finger: "Kidole", thigh: "Paja", knee: "Goti", foot: "Mguu"
+        }
+      },
+      zulu: {
+        name: "Zulu",
+        speechLang: "zu-ZA",
+        parts: {
+          head: "Ikhanda", eye: "Iso", mouth: "Umlomo", neck: "Intamo", shoulder: "Ihlombe", chest: "Isifuba", stomach: "Isisu", hand: "Isandla", finger: "Umunwe", thigh: "Ithanga", knee: "Idolo", foot: "Unyawo"
+        }
+      }
+    };
+
+    const languageSelect = document.getElementById("languageSelect");
+    const figureSelect = document.getElementById("figureSelect");
+    const dropList = document.getElementById("dropList");
+    const wordBank = document.getElementById("wordBank");
+    const scoreCard = document.getElementById("scoreCard");
+    const feedback = document.getElementById("feedback");
+    const femaleFigure = document.getElementById("femaleFigure");
+    const maleFigure = document.getElementById("maleFigure");
+
+    Object.entries(languages).forEach(([id, lang]) => {
+      const option = document.createElement("option");
+      option.value = id;
+      option.textContent = lang.name;
+      languageSelect.appendChild(option);
+    });
+
+    function shuffle(array) {
+      return [...array].sort(() => Math.random() - 0.5);
+    }
+
+    function speak(text, langCode) {
+      if (!window.speechSynthesis) {
+        alert("Speech is not supported in this browser.");
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = langCode;
+      utterance.rate = 0.78;
+      utterance.pitch = 1;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function renderGame() {
+      const selectedLanguage = languages[languageSelect.value];
+      dropList.innerHTML = "";
+      wordBank.innerHTML = "";
+      feedback.textContent = "Start dragging the words from the right.";
+      scoreCard.textContent = `Score: 0 / ${bodyParts.length}`;
+
+      bodyParts.forEach(part => {
+        const row = document.createElement("div");
+        row.className = "drop-row";
+
+        const emptyBox = document.createElement("div");
+        emptyBox.className = "empty-box";
+        emptyBox.dataset.answer = part.key;
+        emptyBox.textContent = "Drop here";
+
+        emptyBox.addEventListener("dragover", event => {
+          event.preventDefault();
+          emptyBox.classList.add("over");
+        });
+        emptyBox.addEventListener("dragleave", () => emptyBox.classList.remove("over"));
+        emptyBox.addEventListener("drop", event => {
+          event.preventDefault();
+          emptyBox.classList.remove("over", "correct", "wrong");
+          const draggedKey = event.dataTransfer.getData("text/plain");
+          const word = selectedLanguage.parts[draggedKey];
+          emptyBox.textContent = word;
+          emptyBox.dataset.dropped = draggedKey;
+          const draggedCard = document.querySelector(`[data-card-key="${draggedKey}"]`);
+          if (draggedCard) draggedCard.classList.add("used");
+        });
+
+        const english = document.createElement("div");
+        english.className = "english-label";
+        english.textContent = part.english;
+
+        row.appendChild(emptyBox);
+        row.appendChild(english);
+        dropList.appendChild(row);
+      });
+
+      shuffle(bodyParts).forEach(part => {
+        const card = document.createElement("div");
+        card.className = "word-card";
+        card.draggable = true;
+        card.dataset.cardKey = part.key;
+
+        const word = document.createElement("span");
+        word.textContent = selectedLanguage.parts[part.key];
+
+        const soundButton = document.createElement("button");
+        soundButton.className = "sound-btn";
+        soundButton.type = "button";
+        soundButton.textContent = "🔊";
+        soundButton.title = `Hear ${selectedLanguage.parts[part.key]}`;
+        soundButton.addEventListener("click", event => {
+          event.stopPropagation();
+          speak(selectedLanguage.parts[part.key], selectedLanguage.speechLang);
+        });
+
+        card.appendChild(word);
+        card.appendChild(soundButton);
+        card.addEventListener("dragstart", event => {
+          event.dataTransfer.setData("text/plain", part.key);
+        });
+        wordBank.appendChild(card);
+      });
+    }
+
+    function checkAnswers() {
+      const boxes = document.querySelectorAll(".empty-box");
+      let score = 0;
+      boxes.forEach(box => {
+        box.classList.remove("correct", "wrong");
+        if (box.dataset.dropped === box.dataset.answer) {
+          box.classList.add("correct");
+          score++;
+        } else {
+          box.classList.add("wrong");
+        }
+      });
+      scoreCard.textContent = `Score: ${score} / ${bodyParts.length}`;
+      feedback.textContent = score === bodyParts.length
+        ? "Excellent. You matched every body part correctly."
+        : `You got ${score} out of ${bodyParts.length}. Check the red boxes and try again.`;
+    }
+
+    figureSelect.addEventListener("change", () => {
+      const showFemale = figureSelect.value === "female";
+      femaleFigure.style.display = showFemale ? "block" : "none";
+      maleFigure.style.display = showFemale ? "none" : "block";
+    });
+
+    languageSelect.addEventListener("change", renderGame);
+    document.getElementById("resetBtn").addEventListener("click", renderGame);
+    document.getElementById("checkBtn").addEventListener("click", checkAnswers);
+
+    languageSelect.value = "yoruba";
+    renderGame();
+
+    /*
+      API connection placeholder:
+      Replace languages[language].parts with data from your chosen African language API.
+      Example shape expected by this game:
+      {
+        language: "Yoruba",
+        speechLang: "yo-NG",
+        parts: { head: "Orí", eye: "Ojú", ... }
+      }
+    */
+  </script>
+</body>
+</html>
