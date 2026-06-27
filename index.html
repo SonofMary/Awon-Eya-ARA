@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>African Languages Body Parts Game</title>
-  <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
+  
 </head>
 <body>
   <header>
@@ -28,6 +29,10 @@
       <button id="resetBtn">Reset Game</button>
       <button id="checkBtn">Check Answers</button>
       <div class="score-card" id="scoreCard">Score: 0 / 12</div>
+      <div class="correct-answer-card" id="correctAnswerCard">
+        <strong>Correct Answer</strong>
+        <span>Check your result to see missed answers.</span>
+      </div>
     </section>
 
     <section class="game-layout">
@@ -179,6 +184,7 @@
     const dropList = document.getElementById("dropList");
     const wordBank = document.getElementById("wordBank");
     const scoreCard = document.getElementById("scoreCard");
+    const correctAnswerCard = document.getElementById("correctAnswerCard");
     const feedback = document.getElementById("feedback");
     const femaleFigure = document.getElementById("femaleFigure");
     const maleFigure = document.getElementById("maleFigure");
@@ -213,6 +219,10 @@
       wordBank.innerHTML = "";
       feedback.textContent = "Start dragging the words from the right.";
       scoreCard.textContent = `Score: 0 / ${bodyParts.length}`;
+      correctAnswerCard.innerHTML = `
+        <strong>Correct Answer</strong>
+        <span>Check your result to see missed answers.</span>
+      `;
 
       bodyParts.forEach(part => {
         const row = document.createElement("div");
@@ -277,21 +287,53 @@
     }
 
     function checkAnswers() {
+      const selectedLanguage = languages[languageSelect.value];
       const boxes = document.querySelectorAll(".empty-box");
       let score = 0;
+      let missingOrWrongAnswers = [];
+
       boxes.forEach(box => {
         box.classList.remove("correct", "wrong");
-        if (box.dataset.dropped === box.dataset.answer) {
+
+        const correctKey = box.dataset.answer;
+        const correctWord = selectedLanguage.parts[correctKey];
+        const englishName = bodyParts.find(part => part.key === correctKey).english;
+
+        if (box.dataset.dropped === correctKey) {
           box.classList.add("correct");
+          box.textContent = correctWord;
           score++;
         } else {
           box.classList.add("wrong");
+
+          const currentAnswer = box.dataset.dropped
+            ? selectedLanguage.parts[box.dataset.dropped]
+            : "No answer";
+
+          box.innerHTML = `
+            <span>${currentAnswer}</span>
+            <span class="answer-hint">Correct: ${correctWord}</span>
+          `;
+
+          missingOrWrongAnswers.push(`${englishName}: ${correctWord}`);
         }
       });
+
       scoreCard.textContent = `Score: ${score} / ${bodyParts.length}`;
-      feedback.textContent = score === bodyParts.length
-        ? "Excellent. You matched every body part correctly."
-        : `You got ${score} out of ${bodyParts.length}. Check the red boxes and try again.`;
+
+      if (score === bodyParts.length) {
+        correctAnswerCard.innerHTML = `
+          <strong>Correct Answer</strong>
+          <span>All answers are correct.</span>
+        `;
+        feedback.textContent = "Excellent. You matched every body part correctly.";
+      } else {
+        correctAnswerCard.innerHTML = `
+          <strong>Correct Answer</strong>
+          <span>${missingOrWrongAnswers.join("<br>")}</span>
+        `;
+        feedback.textContent = `You got ${score} out of ${bodyParts.length}. See the Correct Answer box above.`;
+      }
     }
 
     figureSelect.addEventListener("change", () => {
